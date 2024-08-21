@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('1234.jpeg'); /* Replace with your image URL */
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(253, 184, 184, 0.9); /* Slight transparency for better readability */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin: 10px 0 5px;
+        }
+
+        input, select, button {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid#f1e4e4;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #7ceaf0;
+            color:black;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #5db9d4;
+        }
+
+        #birthdayList {
+            margin-top: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f1e4e4;
+            border: 1px solid #f1e4e4;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            input, select, button {
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 16px;
+            }
+
+            li {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            input, select, button {
+                padding: 6px;
+                font-size: 12px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+
+            li {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Birthday Tracker</h1>
+        <form id="birthdayForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+            
+            <label for="relation">Relation:</label>
+            <select id="relation">
+                <option value="family">Family</option>
+                <option value="friend">Friend</option>
+                <option value="acquaintance">Acquaintance</option>
+            </select>
+            
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" required>
+            
+            <label for="stars">Importance:</label>
+            <select id="stars">
+                <option value="1">⭐</option>
+                <option value="2">⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="5">⭐⭐⭐⭐⭐</option>
+            </select>
+            
+            <button type="submit">Add Birthday</button>
+        </form>
+        
+        <div id="birthdayList">
+            <h2>Upcoming Birthdays</h2>
+            <ul id="list"></ul>
+        </div>
+    </div>
+    <script>
+        const birthdays = [];
+
+        function formatDate(dateStr) {
+            const [year, month, day] = dateStr.split('-');
+            return new Date(year, month - 1, day);
+        }
+
+        function renderList() {
+            const list = document.getElementById('list');
+            list.innerHTML = '';
+
+            birthdays.sort((a, b) => a.dob - b.dob);
+
+            birthdays.forEach(birthday => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <strong>Name:</strong> ${birthday.name} <br>
+                    <strong>Relation:</strong> ${birthday.relation} <br>
+                    <strong>Date of Birth:</strong> ${birthday.dob.toDateString()} <br>
+                    <strong>Importance:</strong> ${'⭐'.repeat(birthday.stars)}
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        document.getElementById('birthdayForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const relation = document.getElementById('relation').value;
+            const dob = formatDate(document.getElementById('dob').value);
+            const stars = document.getElementById('stars').value;
+            
+            if (name && dob) {
+                birthdays.push({ name, relation, dob, stars });
+                renderList();
+                
+                // Clear form
+                document.getElementById('birthdayForm').reset();
+            }
+        });
+    </script>
+</body>
+</html>
